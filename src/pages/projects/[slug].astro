@@ -1,0 +1,74 @@
+---
+import { render } from 'astro:content';
+import 'katex/dist/katex.min.css';
+import Base from '../../layouts/Base.astro';
+import { getProjects, formatMonth, type Project } from '../../data/projects';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((project, i) => ({
+    params: { slug: project.id },
+    props: { project, prev: projects[i - 1], next: projects[i + 1] },
+  }));
+}
+
+interface Props {
+  project: Project;
+  prev?: Project;
+  next?: Project;
+}
+
+const { project, prev, next } = Astro.props;
+const { data } = project;
+const { Content, headings } = await render(project);
+const sections = headings.filter((h) => h.depth === 2);
+const active = data.started === data.updated
+  ? formatMonth(data.started)
+  : `${formatMonth(data.started)} – ${formatMonth(data.updated)}`;
+---
+
+<Base title={data.title} description={data.summary}>
+  <article class="project">
+    <p class="back"><a href="/">← All projects</a></p>
+    <h1>{data.title}{data.draft && <span class="draft-tag">draft</span>}</h1>
+    <p class="lede">{data.summary}</p>
+
+    <table class="facts">
+      <tbody>
+        {data.repos.length > 0 && (
+          <tr>
+            <th scope="row">{data.repos.length > 1 ? 'Repositories' : 'Repository'}</th>
+            <td>
+              <ul class="repos">
+                {data.repos.map((r) => (
+                  <li><a href={r.url}>{r.name}</a>{r.note && <span class="note"> · {r.note}</span>}</li>
+                ))}
+              </ul>
+            </td>
+          </tr>
+        )}
+        {data.languages.length > 0 && <tr><th scope="row">Languages</th><td>{data.languages.join(', ')}</td></tr>}
+        <tr><th scope="row">Active</th><td>{active}</td></tr>
+        {data.status && <tr><th scope="row">Status</th><td>{data.status}</td></tr>}
+      </tbody>
+    </table>
+
+    {sections.length >= 5 && (
+      <nav class="toc" aria-label="On this page">
+        <h2>On this page</h2>
+        <ol>
+          {sections.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}
+        </ol>
+      </nav>
+    )}
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    <nav class="pager" aria-label="More projects">
+      {prev ? <a href={`/projects/${prev.id}/`}><span>Previous</span>{prev.data.title}</a> : <span></span>}
+      {next ? <a class="next" href={`/projects/${next.id}/`}><span>Next</span>{next.data.title}</a> : <span></span>}
+    </nav>
+  </article>
+</Base>

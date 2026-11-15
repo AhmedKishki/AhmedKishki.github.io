@@ -1,0 +1,58 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import portrait from '../assets/portrait.jpg';
+import { areas, site } from '../data/areas';
+import { getProjects } from '../data/projects';
+
+const projects = await getProjects();
+const groups = areas
+  .map((area) => ({ ...area, items: projects.filter((p) => p.data.area === area.id) }))
+  .filter((g) => g.items.length > 0);
+const tel = site.phone.replace(/\s+/g, '');
+---
+
+<Base description={`Portfolio of ${site.name}, ${site.role}.`}>
+  <section class="intro">
+    <Image class="portrait" src={portrait} alt={`Portrait of ${site.name}`} width={176} height={176} densities={[1, 2]} loading="eager" />
+    <div class="intro-text">
+      <h1>{site.name}</h1>
+      <p class="role">{site.role}</p>
+      <p class="lede">Portfolio</p>
+      <p class="description">{site.description}</p>
+    </div>
+  </section>
+
+  <section class="contact" aria-label="Contact and CV">
+    <ul class="contact-list">
+      <li><span class="label">Email</span><a href={`mailto:${site.email}`}>{site.email}</a></li>
+      <li><span class="label">Phone</span><a href={`tel:${tel}`}>{site.phone}</a></li>
+      <li><span class="label">Location</span><span>{site.location}</span></li>
+      <li><span class="label">LinkedIn</span><a href={site.linkedin}>ahmedalkishki6394</a></li>
+      <li><span class="label">GitHub</span><a href={site.github}>AhmedKishki</a></li>
+    </ul>
+    <div class="cv-links">
+      {site.cv.map((c) => (
+        <a class="button" href={c.href} download>
+          <span>{c.label}</span><small>{c.detail}</small>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  {groups.map((group) => (
+    <section class="group" aria-labelledby={`g-${group.id}`}>
+      <h2 id={`g-${group.id}`}>{group.title}</h2>
+      <ul class="project-list">
+        {group.items.map((p) => (
+          <li>
+            <a class="project-title" href={`/projects/${p.id}/`}>{p.data.title}</a>
+            {p.data.draft && <span class="draft-tag">draft</span>}
+            <p class="summary">{p.data.summary}</p>
+            {p.data.languages.length > 0 && <p class="langs">{p.data.languages.join(' · ')}</p>}
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
+</Base>
