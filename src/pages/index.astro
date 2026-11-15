@@ -16,9 +16,8 @@ const tel = site.phone.replace(/\s+/g, '');
   <section class="intro">
     <Image class="portrait" src={portrait} alt={`Portrait of ${site.name}`} width={176} height={176} densities={[1, 2]} loading="eager" />
     <div class="intro-text">
-      <h1>{site.name}</h1>
+      <h1>{site.title}</h1>
       <p class="role">{site.role}</p>
-      <p class="lede">Portfolio</p>
       <p class="description">{site.description}</p>
     </div>
   </section>

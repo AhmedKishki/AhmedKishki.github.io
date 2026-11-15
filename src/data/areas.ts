@@ -7,6 +7,7 @@ export const areas = [
 
 export const site = {
   name: 'Ahmed Alkishki',
+  title: 'Ahmed Alkishki’s Portfolio',
   role: 'Embedded Software Developer',
   github: 'https://github.com/AhmedKishki',
   linkedin: 'https://www.linkedin.com/in/ahmedalkishki6394/',
