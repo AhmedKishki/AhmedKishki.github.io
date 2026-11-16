@@ -2,7 +2,7 @@
 import { render } from 'astro:content';
 import 'katex/dist/katex.min.css';
 import Base from '../../layouts/Base.astro';
-import { getProjects, formatMonth, type Project } from '../../data/projects';
+import { getProjects, type Project } from '../../data/projects';
 
 export async function getStaticPaths() {
   const projects = await getProjects();
@@ -22,9 +22,6 @@ const { project, prev, next } = Astro.props;
 const { data } = project;
 const { Content, headings } = await render(project);
 const sections = headings.filter((h) => h.depth === 2);
-const active = data.started === data.updated
-  ? formatMonth(data.started)
-  : `${formatMonth(data.started)} – ${formatMonth(data.updated)}`;
 ---
 
 <Base title={data.title} description={data.summary}>
@@ -48,8 +45,6 @@ const active = data.started === data.updated
           </tr>
         )}
         {data.languages.length > 0 && <tr><th scope="row">Languages</th><td>{data.languages.join(', ')}</td></tr>}
-        <tr><th scope="row">Active</th><td>{active}</td></tr>
-        {data.status && <tr><th scope="row">Status</th><td>{data.status}</td></tr>}
       </tbody>
     </table>
 

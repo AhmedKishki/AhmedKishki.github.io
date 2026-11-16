@@ -7,10 +7,3 @@ export async function getProjects(): Promise<Project[]> {
   const all = await getCollection('projects', ({ data }) => import.meta.env.DEV || !data.draft);
   return all.sort((a, b) => a.data.order - b.data.order || b.data.updated.localeCompare(a.data.updated));
 }
-
-const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-export function formatMonth(ym: string): string {
-  const [y, m] = ym.split('-');
-  return `${months[Number(m) - 1]} ${y}`;
-}
