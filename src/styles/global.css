@@ -172,14 +172,14 @@ main.wrap { padding-block: 2.5rem 4rem; }
 
 /* Project page */
 .back { margin: 0 0 1.5rem; font-size: 0.95rem; }
-.project h1 { margin: 0; font-size: clamp(1.8rem, 5vw, 2.3rem); letter-spacing: -0.015em; }
+.project h1 { margin: 0; font-size: clamp(1.8rem, 5vw, 2.3rem); letter-spacing: -0.015em; overflow-wrap: anywhere; }
 .project .lede { margin-top: 0.75rem; }
 
 .facts { width: 100%; margin: 1.75rem 0 0; border-collapse: collapse; font-size: 0.95rem; }
 .facts th, .facts td { padding: 0.35rem 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--rule); }
 .facts th { width: 8.5rem; padding-right: 1rem; color: var(--accent); font-weight: 700; }
 .facts tr:first-child th, .facts tr:first-child td { border-top: 2px solid var(--rule-strong); }
-.repos { list-style: none; margin: 0; padding: 0; }
+.repos { list-style: none; margin: 0; padding: 0; overflow-wrap: anywhere; }
 .note { color: var(--muted); }
 
 .toc { margin-top: 2rem; font-size: 0.95rem; }
